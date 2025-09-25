@@ -60,12 +60,9 @@ export default function Login({ onSwitch }) {
 
                 <p className="mt-6 text-center text-sm text-gray-600">
                     Don't have an account?{" "}
-                    <button
-                        onClick={onSwitch}
-                        className="text-indigo-600 hover:underline"
-                    >
+                    <a href="/register" className="text-indigo-600 hover:underline">
                         Register
-                    </button>
+                    </a>
                 </p>
             </div>
         </div>
