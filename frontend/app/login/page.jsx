@@ -15,9 +15,9 @@ export default function Login({ onSwitch }) {
         try {
             const res = await axios.post("http://127.0.0.1:5000/auth/login", { email, password });
             setToken(res.data.access_token);
-            setMessage("✅ Login successful!");
+            setMessage(" Login successful!");
         } catch (err) {
-            setMessage(err.response?.data?.message || "❌ Error logging in");
+            setMessage(err.response?.data?.message || " Error logging in");
         }
     };
 
@@ -29,14 +29,14 @@ export default function Login({ onSwitch }) {
                     <input
                         type="email"
                         placeholder="Email"
-                        className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                        className="w-full px-4 text-black py-3 border rounded-lg outline-none"
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                     <input
                         type="password"
                         placeholder="Password"
-                        className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                        className="w-full px-4 py-3 text-black border rounded-lg outline-none"
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
