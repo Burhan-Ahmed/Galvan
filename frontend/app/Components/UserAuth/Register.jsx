@@ -2,7 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-export default function Register() {
+export default function Register({ onSwitch }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -82,9 +82,12 @@ export default function Register() {
 
         <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <a href="/" className="text-green-600 hover:underline">
+          <button
+            onClick={onSwitch}
+            className="text-green-600 hover:underline"
+          >
             Login
-          </a>
+          </button>
         </p>
       </div>
     </div>

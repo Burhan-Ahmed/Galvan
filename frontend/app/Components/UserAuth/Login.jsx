@@ -2,10 +2,9 @@
 import { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import Register from "@/components/UserAuth/Register";
 
 
-export default function Login() {
+export default function Login({ onSwitch }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
@@ -61,9 +60,12 @@ export default function Login() {
 
                 <p className="mt-6 text-center text-sm text-gray-600">
                     Don't have an account?{" "}
-                    <Link href="/register" className="text-indigo-600 hover:underline">
+                    <button
+                        onClick={onSwitch}
+                        className="text-indigo-600 hover:underline"
+                    >
                         Register
-                    </Link>
+                    </button>
                 </p>
             </div>
         </div>
