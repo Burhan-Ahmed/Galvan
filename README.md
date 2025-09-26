@@ -1,29 +1,43 @@
-# Car Detection using YOLO
+# Full Stack Developer Task – Galvan AI
 
-Progress: Completed
+Progress: / Completed
 
 <br />
 
 <hr />
 
+## Project Description
+This project implements a **User Authentication System** with the following features:
+- User Registration with Profile Picture, Name, Email, Password, Mobile Number.
+- Email-based OTP verification for account activation.
+- Login using JWT authentication.
+- Role-based access control (SuperAdmin & Users).
+- Admin Dashboard to view, create, edit, and delete users.
+- Frontend built with **Next.js (React + Tailwind CSS)**.
+- Backend built with **Flask, Flask-RestX, SQLAlchemy, and JWT**.
+
+<hr />
+
 ## Steps to run
-<li>Open the .ipynb file in any IDE of your choice</li>
-<li>Run the first cell to install the ultralytics module</li>
-<li>Run the second cell</li>
-<li>Program will ask the user to enter the Name of a Picture</li>
-<li>User is supposed to enter the name of the desired image that exits in the same folder </li>
-<li>Program will output the new image with bounding box in it to speicfy or locate the car</li>
-<li>No Bounding Box will be displayed in case if no car is present in the image.</li>
-<hr />
-
-## DL Model Specs
-<li>Ultralytics YOLO pretrained Model was used</li>
-<li>More specifically Medium variant of the YOLOV12 was used in this project</li>
-<li>.pt file refers to the weight file of the model</li>
-<hr />
-
+- The project directory contains two folders: **frontend** and **backend**, each holding the respective code.
+- Install backend dependencies by running:
+  ```bash
+  pip install -r requirements.txt```
+- Navigate to the frontend folder and start the Next.js development server:
 ## Tool
-<li>Google Collab</li>
+<li>VS Code</li>
+<li>   Swagger UI </li>
+<li>  SQlite  </li>
+<li> Github Desktop   </li>
+
 <hr />
+
+## Setup Instructions
+
+### Backend (Flask)
+1. Navigate to the backend folder:
+   ```bash
+   cd backend
+
 
 
