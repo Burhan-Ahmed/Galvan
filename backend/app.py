@@ -6,6 +6,9 @@ from flask_jwt_extended import (
 )
 from models import db, User
 from utils import generate_otp, send_otp_email
+from flask_jwt_extended import jwt_required, get_jwt
+from flask import request
+from flask_cors import cross_origin
 
 app = Flask(__name__)
 #CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}})
@@ -185,11 +188,6 @@ class Refresh(Resource):
 
 
 # 🔹 Admin Only: Manage Users
-from flask_jwt_extended import jwt_required, get_jwt
-from flask import request
-from flask_cors import cross_origin
-
-
 @admin_ns.route("/users")
 class UserList(Resource):
     @jwt_required()

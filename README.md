@@ -17,9 +17,6 @@ This project implements a **User Authentication System** with the following feat
 
 ## Steps to run
 - The project directory contains two folders: **frontend** and **backend**, each holding the respective code.
-- Install backend dependencies by running:
-  ```bash
-  pip install -r requirements.txt
 - Navigate to the frontend folder and start the Next.js development server:
   ```bash
     cd frontend
@@ -28,6 +25,7 @@ This project implements a **User Authentication System** with the following feat
 - Navigate to the backend folder and run the Flask server:
   ```bash
     cd backend
+    pip install -r requirements.txt 
     python app.py
 
 Open your browser and go to:
