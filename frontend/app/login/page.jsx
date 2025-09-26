@@ -63,6 +63,14 @@ export default function Login({ onSwitch }) {
                 {message && (
                     <p className="mt-4 text-center text-sm text-gray-700">{message}</p>
                 )}
+
+                <p className="mt-6 text-center text-sm text-gray-600">
+                    Don't have an account?{" "}
+                    <a href="/register" className="text-green-600 hover:underline font-semibold">
+                        Register here
+                    </a>
+                </p>
+
             </div>
         </div>
     );

@@ -247,6 +247,21 @@ class UserDetail(Resource):
         db.session.commit()
         return {"message": "User updated successfully"}, 200
 
+    @cross_origin(origin="http://localhost:3000", headers=["Content-Type", "Authorization"])
+    @jwt_required()
+    def delete(self, id):
+        """Delete user (SuperAdmin only)"""
+        claims = get_jwt()
+        if claims.get("role") != "superadmin":
+            return {"message": "Unauthorized"}, 403
+
+        user = User.query.get(id)
+        if not user:
+            return {"message": "User not found"}, 404
+
+        db.session.delete(user)
+        db.session.commit()
+        return {"message": "User deleted successfully"}, 200
 
 if __name__ == "__main__":
     with app.app_context():

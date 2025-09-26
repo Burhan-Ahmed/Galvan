@@ -20,7 +20,7 @@ export default function Register({ onSwitch }) {
       formData.append("last_name", lastName);
       formData.append("email", email);
       formData.append("password", password);
-      formData.append("mobile", mobile);
+      formData.append("mobile_number", mobile);
       if (profilePic) formData.append("profile_pic", profilePic);
 
       const res = await axios.post("http://127.0.0.1:5000/auth/register", formData, {

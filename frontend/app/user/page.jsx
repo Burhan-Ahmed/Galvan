@@ -10,15 +10,16 @@ export default function UserPage() {
 
     // Decode JWT payload
     const payload = JSON.parse(atob(token.split(".")[1]));
-    const sub = payload.sub;
 
     setUser({
-      id: sub.id,
-      name: `${sub.first_name} ${sub.last_name}`,
-      email: sub.email,
-      mobile: sub.mobile_number,
+      id: payload.sub, // identity is the user ID
+      name: `${payload.first_name} ${payload.last_name}`,
+      email: payload.email,
+      mobile: payload.mobile_number,
+      role: payload.role
     });
   }, []);
+
 
   if (!user) return <p>Loading...</p>;
 
