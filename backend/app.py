@@ -20,7 +20,6 @@ def after_request(response):
     response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
     return response
 
-# Config
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///database.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "supersecretkey")
@@ -36,7 +35,6 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
 
-        # Predefine SuperAdmin if not exists
         if not User.query.filter_by(role="superadmin").first():
             super_admin = User(
                 first_name="Super",

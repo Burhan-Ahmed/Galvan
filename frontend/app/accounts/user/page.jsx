@@ -11,7 +11,6 @@ export default function UserPage() {
     if (!token) return;
 
     try {
-      // Decode JWT payload
       const payload = JSON.parse(atob(token.split(".")[1]));
       setUser({
         id: payload.sub,
@@ -36,7 +35,6 @@ export default function UserPage() {
 
   return (
     <div className="p-4 sm:p-6 md:p-10 max-w-3xl mx-auto">
-      {/* Header with logout */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-white">
           Welcome, {user.name}
@@ -49,7 +47,6 @@ export default function UserPage() {
         </button>
       </div>
 
-      {/* User details */}
       <div className="bg-white shadow rounded-lg p-4 sm:p-6">
         <h2 className="text-lg font-semibold text-gray-700 mb-4">Your Details</h2>
         <ul className="space-y-3 text-gray-700">

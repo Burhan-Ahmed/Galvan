@@ -14,7 +14,6 @@ export default function OTPVerify() {
         try {
             const res = await axios.post("http://127.0.0.1:5000/auth/otpverification", { email, otp });
             setMessage(res.data.message);
-            // Redirect to login after successful OTP verification
             setTimeout(() => {
                 router.push("/login");
             }, 1500);

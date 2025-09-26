@@ -18,13 +18,11 @@ export default function Login({ onSwitch }) {
       });
       const { access_token, role } = res.data;
 
-      // Save token & role
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("role", role);
 
       setMessage("Login successful!");
 
-      // Navigate based on role
       if (role === "superadmin") {
         router.push("/accounts/admin");
       } else {

@@ -6,9 +6,6 @@ from flask_jwt_extended import create_access_token, create_refresh_token, jwt_re
 
 auth_ns = Namespace("auth", description="Authentication operations")
 
-# =======================
-# API Models
-# =======================
 register_model = auth_ns.model("Register", {
     "profile_picture": fields.String,
     "first_name": fields.String(required=True),
@@ -28,9 +25,6 @@ verify_model = auth_ns.model("Verify", {
     "otp": fields.String(required=True),
 })
 
-# =======================
-# Helper Function
-# =======================
 def create_user_from_form(first_name, last_name, email, password, mobile_number, profile_file=None, role="user", verified=False):
     """Create a user with optional profile picture."""
     if User.query.filter_by(email=email).first():
@@ -39,7 +33,7 @@ def create_user_from_form(first_name, last_name, email, password, mobile_number,
     profile_filename = None
     if profile_file:
         profile_filename = f"profile_{email}_{profile_file.filename}"
-        profile_file.save(f"uploads/{profile_filename}")  # ensure uploads/ folder exists
+        profile_file.save(f"uploads/{profile_filename}") 
 
     user = User(
         profile_picture=profile_filename,
@@ -55,11 +49,6 @@ def create_user_from_form(first_name, last_name, email, password, mobile_number,
     db.session.commit()
     return user, None
 
-# =======================
-# Routes
-# =======================
-
-# Register User
 @auth_ns.route("/register")
 class Register(Resource):
     def post(self):
@@ -83,7 +72,6 @@ class Register(Resource):
         return {"message": "User registered. Please verify OTP sent to your email."}, 201
 
 
-# OTP Verification
 @auth_ns.route("/otpverification")
 class Verify(Resource):
     @auth_ns.expect(verify_model)
@@ -99,7 +87,7 @@ class Verify(Resource):
         return {"message": "User verified successfully"}, 200
 
 
-# Login
+
 @auth_ns.route("/login")
 class Login(Resource):
     @auth_ns.expect(login_model)
@@ -133,8 +121,6 @@ class Login(Resource):
             "role": user.role
         }, 200
 
-
-# Refresh JWT Access Token
 @auth_ns.route("/refresh")
 class Refresh(Resource):
     @jwt_required(refresh=True)

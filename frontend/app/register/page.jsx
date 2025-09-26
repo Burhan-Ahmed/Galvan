@@ -43,7 +43,7 @@ export default function Register({ onSwitch }) {
 
         {!otpStep ? (
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* First & Last Name */}
+
             <div className="flex flex-col sm:flex-row gap-4">
               <input
                 type="text"
@@ -61,7 +61,7 @@ export default function Register({ onSwitch }) {
               />
             </div>
 
-            {/* Email */}
+
             <input
               type="email"
               placeholder="Email"
@@ -70,7 +70,7 @@ export default function Register({ onSwitch }) {
               required
             />
 
-            {/* Password */}
+
             <input
               type="password"
               placeholder="Password"
@@ -79,7 +79,7 @@ export default function Register({ onSwitch }) {
               required
             />
 
-            {/* Mobile */}
+
             <input
               type="text"
               placeholder="Mobile Number"
@@ -88,7 +88,7 @@ export default function Register({ onSwitch }) {
               required
             />
 
-            {/* Profile Picture */}
+
             <input
               type="file"
               accept="image/*"
@@ -96,7 +96,7 @@ export default function Register({ onSwitch }) {
               onChange={(e) => setProfilePic(e.target.files?.[0] || null)}
             />
 
-            {/* Submit */}
+
             <button
               type="submit"
               className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition"

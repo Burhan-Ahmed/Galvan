@@ -16,14 +16,13 @@ export default function UserTable({ users: propUsers, handleDelete, openEditModa
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // ✅ Filter superadmin and only show verified users
       const filtered = response.data.filter(
         (user) => user.role !== "superadmin" && user.is_verified
       );
       setInternalUsers(filtered);
     } catch (err) {
       console.error("UserTable: error fetching users ->", err);
-      setInternalUsers([]); // clear on error
+      setInternalUsers([]);
     } finally {
       setLoading(false);
     }

@@ -11,7 +11,7 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
     mobile_number = db.Column(db.String(20), nullable=False)
-    role = db.Column(db.String(20), default="user")   # "superadmin" or "user"
+    role = db.Column(db.String(20), default="user") 
     is_verified = db.Column(db.Boolean, default=False)
     otp = db.Column(db.String(6), nullable=True)
 

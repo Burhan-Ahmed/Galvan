@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import "./globals.css";
 
-// Load Roboto font with SSR-safe className
 const roboto = Roboto({
-  weight: ["400", "500", "700"], // font weights you need
-  subsets: ["latin"],             // character subsets
-  display: "swap",                // ensures consistent SSR + client rendering
+  weight: ["400", "500", "700"], 
+  subsets: ["latin"],             
+  display: "swap",                
 });
 
 export const metadata: Metadata = {
@@ -19,7 +18,6 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={roboto.className}>
-      {/* Body uses static classes only to avoid hydration mismatch */}
       <body className="antialiased">
         {children}
       </body>

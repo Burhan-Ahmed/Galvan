@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import AdminLayout from "@/app/AdminLayout";
-import UserTable from "./UserTable";   // ✅ table with actions
-import UserForm from "./UserForm";     // ✅ create form
-import EditModal from "./EditModal";   // ✅ edit modal
+import UserTable from "./UserTable";
+import UserForm from "./UserForm";
+import EditModal from "./EditModal";
 
 export default function AdminPage() {
     const [activeSection, setActiveSection] = useState("home");
@@ -16,7 +16,6 @@ export default function AdminPage() {
     const token =
         typeof window !== "undefined" ? localStorage.getItem("access_token") : "";
 
-    // ✅ Fetch users
     const fetchUsers = async () => {
         try {
             const res = await axios.get("http://127.0.0.1:5000/admin/users", {
