@@ -20,7 +20,6 @@ export default function UserPage() {
     });
   }, []);
 
-
   if (!user) return <p>Loading...</p>;
 
   return (
