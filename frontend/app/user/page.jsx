@@ -8,13 +8,15 @@ export default function UserPage() {
     const token = localStorage.getItem("access_token");
     if (!token) return;
 
-    // Decode token (simplest way: parse JWT payload)
+    // Decode JWT payload
     const payload = JSON.parse(atob(token.split(".")[1]));
+    const sub = payload.sub;
+
     setUser({
-      id: payload.id,
-      name: payload.role === "user" ? "User" : "SuperAdmin", // optional
-      email: payload.email || "unknown",
-      mobile: payload.mobile_number || "unknown",
+      id: sub.id,
+      name: `${sub.first_name} ${sub.last_name}`,
+      email: sub.email,
+      mobile: sub.mobile_number,
     });
   }, []);
 

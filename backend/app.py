@@ -8,7 +8,7 @@ from models import db, User
 from utils import generate_otp, send_otp_email
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:3000"])  # allow your Next.js frontend
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 
 # Config
@@ -132,14 +132,31 @@ class Login(Resource):
         if not user.is_verified:
             return {"message": "Please verify your email first"}, 403
 
-        access_token = create_access_token(identity={"id": user.id, "role": user.role, "first_name": user.first_name})
-        refresh_token = create_refresh_token(identity={"id": user.id, "role": user.role, "first_name": user.first_name})
+        # Include all info you want to display on frontend
+        access_token = create_access_token(
+            identity=str(user.id),  # simple string
+            additional_claims={
+                "role": user.role,
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "email": user.email,
+                "mobile_number": user.mobile_number
+            }
+        )
+
+        refresh_token = create_refresh_token(
+            identity=str(user.id),  # same approach
+            additional_claims={
+                "role": user.role
+            }
+        )
 
         return {
             "access_token": access_token,
             "refresh_token": refresh_token,
             "role": user.role
         }, 200
+
 
 
 # 🔹 Refresh Token
@@ -154,23 +171,27 @@ class Refresh(Resource):
 
 
 # 🔹 Admin Only: Manage Users
+from flask_jwt_extended import jwt_required, get_jwt
+from flask import request
+
 @admin_ns.route("/users")
 class UserList(Resource):
     @jwt_required()
-    @admin_ns.marshal_list_with(user_model)
     def get(self):
         """Get all users (SuperAdmin only)"""
-        identity = get_jwt_identity()
-        if identity["role"] != "superadmin":
+        claims = get_jwt()  # access JWT claims
+        if claims.get("role") != "superadmin":
             return {"message": "Unauthorized"}, 403
-        return User.query.all()
+
+        users = User.query.all()
+        return [u.to_dict() for u in users], 200
 
     @jwt_required()
     @admin_ns.expect(register_model)
     def post(self):
         """Create a new user (SuperAdmin only)"""
-        identity = get_jwt_identity()
-        if identity["role"] != "superadmin":
+        claims = get_jwt()  # access JWT claims
+        if claims.get("role") != "superadmin":
             return {"message": "Unauthorized"}, 403
 
         data = request.json
@@ -190,6 +211,7 @@ class UserList(Resource):
         db.session.add(user)
         db.session.commit()
         return {"message": "User created successfully"}, 201
+
 
 
 if __name__ == "__main__":

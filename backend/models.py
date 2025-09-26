@@ -20,3 +20,16 @@ class User(db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def to_dict(self):
+        """Return a dictionary representation of the user for JSON responses"""
+        return {
+            "id": self.id,
+            "profile_picture": self.profile_picture,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email,
+            "mobile_number": self.mobile_number,
+            "role": self.role,
+            "is_verified": self.is_verified
+        }
