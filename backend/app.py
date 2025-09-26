@@ -132,8 +132,8 @@ class Login(Resource):
         if not user.is_verified:
             return {"message": "Please verify your email first"}, 403
 
-        access_token = create_access_token(identity={"id": user.id, "role": user.role})
-        refresh_token = create_refresh_token(identity={"id": user.id, "role": user.role})
+        access_token = create_access_token(identity={"id": user.id, "role": user.role, "first_name": user.first_name})
+        refresh_token = create_refresh_token(identity={"id": user.id, "role": user.role, "first_name": user.first_name})
 
         return {
             "access_token": access_token,
