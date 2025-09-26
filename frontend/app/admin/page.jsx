@@ -145,7 +145,7 @@ export default function AdminPage() {
                                                     </button>
                                                     <button
                                                         onClick={() => handleUpdate(u)}
-                                                        className="bg-yellow-500 px-2 py-1 rounded text-white"
+                                                        className="bg-yellow-400 px-2 py-1 rounded text-white"
                                                     >
                                                         Edit
                                                     </button>
