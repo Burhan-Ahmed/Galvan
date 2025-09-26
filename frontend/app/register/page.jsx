@@ -100,7 +100,7 @@ export default function Register({ onSwitch }) {
           <div className="text-center">
             <p className="text-gray-700">{message}</p>
             <a
-              href="/otp"
+              href="/otpverification"
               className="inline-block mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
             >
               Go to OTP Verification

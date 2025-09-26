@@ -101,7 +101,7 @@ class Register(Resource):
 
 
 # 🔹 OTP Verification
-@auth_ns.route("/verify")
+@auth_ns.route("/otpverification")
 class Verify(Resource):
     @auth_ns.expect(verify_model)
     def post(self):
