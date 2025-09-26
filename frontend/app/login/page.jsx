@@ -1,23 +1,35 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
-import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 
 export default function Login({ onSwitch }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
-    const [token, setToken] = useState("");
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const res = await axios.post("http://127.0.0.1:5000/auth/login", { email, password });
-            setToken(res.data.access_token);
-            setMessage(" Login successful!");
+            const { access_token, role } = res.data;
+
+            // Save token & role
+            localStorage.setItem("access_token", access_token);
+            localStorage.setItem("role", role);
+
+            setMessage("Login successful!");
+
+            // Navigate based on role
+            if (role === "superadmin") {
+                router.push("/admin");
+            } else {
+                router.push("/user");
+            }
+
         } catch (err) {
-            setMessage(err.response?.data?.message || " Error logging in");
+            setMessage(err.response?.data?.message || "Error logging in");
         }
     };
 
@@ -51,19 +63,6 @@ export default function Login({ onSwitch }) {
                 {message && (
                     <p className="mt-4 text-center text-sm text-gray-700">{message}</p>
                 )}
-
-                {token && (
-                    <div className="mt-4 bg-gray-100 p-3 rounded text-xs break-all">
-                        <strong>JWT:</strong> {token}
-                    </div>
-                )}
-
-                <p className="mt-6 text-center text-sm text-gray-600">
-                    Don't have an account?{" "}
-                    <a href="/register" className="text-indigo-600 hover:underline">
-                        Register
-                    </a>
-                </p>
             </div>
         </div>
     );
