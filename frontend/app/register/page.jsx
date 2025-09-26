@@ -28,44 +28,49 @@ export default function Register({ onSwitch }) {
       });
 
       setMessage(res.data.message || "✅ Registration successful! Please verify OTP.");
-      setOtpStep(true); // move to OTP verification step
+      setOtpStep(true);
     } catch (err) {
       setMessage(err.response?.data?.message || "❌ Error registering user");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 via-blue-500 to-purple-600">
-      <div className="bg-white shadow-2xl rounded-2xl p-10 w-full max-w-lg">
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">Register</h1>
+    <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-green-400 via-blue-500 to-purple-600">
+      <div className="bg-white shadow-2xl rounded-2xl p-6 sm:p-10 w-full max-w-md sm:max-w-lg lg:max-w-xl">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">
+          Register
+        </h1>
 
         {!otpStep ? (
           <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="flex gap-4">
+            {/* First & Last Name */}
+            <div className="flex flex-col sm:flex-row gap-4">
               <input
                 type="text"
                 placeholder="First Name"
-                className="w-1/2 px-4 py-3 text-black border rounded-lg outline-none"
+                className="w-full sm:w-1/2 px-4 py-3 text-black border rounded-lg outline-none"
                 onChange={(e) => setFirstName(e.target.value)}
                 required
               />
               <input
                 type="text"
                 placeholder="Last Name"
-                className="w-1/2 px-4 py-3 border text-black rounded-lg outline-none"
+                className="w-full sm:w-1/2 px-4 py-3 border text-black rounded-lg outline-none"
                 onChange={(e) => setLastName(e.target.value)}
                 required
               />
             </div>
 
+            {/* Email */}
             <input
               type="email"
               placeholder="Email"
-              className="w-full px-4 py-3 border text-black rounded-lg  outline-none"
+              className="w-full px-4 py-3 border text-black rounded-lg outline-none"
               onChange={(e) => setEmail(e.target.value)}
               required
             />
 
+            {/* Password */}
             <input
               type="password"
               placeholder="Password"
@@ -74,14 +79,16 @@ export default function Register({ onSwitch }) {
               required
             />
 
+            {/* Mobile */}
             <input
               type="text"
               placeholder="Mobile Number"
-              className="w-full px-4 py-3 border text-black rounded-lg  outline-none"
+              className="w-full px-4 py-3 border text-black rounded-lg outline-none"
               onChange={(e) => setMobile(e.target.value)}
               required
             />
 
+            {/* Profile Picture */}
             <input
               type="file"
               accept="image/*"
@@ -89,6 +96,7 @@ export default function Register({ onSwitch }) {
               onChange={(e) => setProfilePic(e.target.files?.[0] || null)}
             />
 
+            {/* Submit */}
             <button
               type="submit"
               className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition"

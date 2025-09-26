@@ -12,7 +12,10 @@ This project implements a **User Authentication System** with the following feat
 - Admin Dashboard to view, create, edit, and delete users.
 - Frontend built with **Next.js (React + Tailwind CSS)**.
 - Backend built with **Flask, Flask-RestX, SQLAlchemy, and JWT**.
-
+- Use ' https://temp-mail.io/en ' for fake email generation
+- Admin Credentials
+ email: admin@system.com
+ pass : Admin@123
 <hr />
 
 ## Steps to run
