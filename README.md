@@ -25,8 +25,6 @@ This project implements a **User Authentication System** with the following feat
 - **Email**: `admin@system.com`  
 - **Password**: `Admin@123`  
 
----
-
 <hr />
 
 ## Steps to run
