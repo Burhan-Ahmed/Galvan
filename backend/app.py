@@ -9,7 +9,7 @@ from utils import generate_otp, send_otp_email
 
 app = Flask(__name__)
 #CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}})
-CORS(app, resources={r"/admin/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
 @app.after_request
 def after_request(response):
@@ -59,48 +59,58 @@ user_model = api.model("User", {
     "is_verified": fields.Boolean
 })
 
+def create_user_from_form(
+    first_name, last_name, email, password, mobile_number,
+    profile_file=None, role="user", verified=False
+):
+    """Helper function to create a user with optional profile picture."""
+    if User.query.filter_by(email=email).first():
+        return None, "Email already registered"
+
+    profile_filename = None
+    if profile_file:
+        profile_filename = f"profile_{email}_{profile_file.filename}"
+        profile_file.save(f"uploads/{profile_filename}")  # ensure uploads/ exists
+
+    user = User(
+        profile_picture=profile_filename,
+        first_name=first_name,
+        last_name=last_name,
+        email=email,
+        mobile_number=mobile_number,
+        role=role,
+        is_verified=verified
+    )
+    user.set_password(password)
+
+    db.session.add(user)
+    db.session.commit()
+    return user, None
+
+
 # 🔹 Register (User / Super Admin)
 @auth_ns.route("/register")
 class Register(Resource):
-    @auth_ns.expect(register_model)
     def post(self):
-        """Register a new user (default: role=user) with optional profile picture"""
-        # Get text fields from form
+        """Register a new user (with OTP verification)"""
         first_name = request.form.get("first_name")
         last_name = request.form.get("last_name")
         email = request.form.get("email")
         password = request.form.get("password")
-        mobile_number = request.form.get("mobile")
-
-        # Get file (profile picture)
+        mobile_number = request.form.get("mobile_number")
         profile_file = request.files.get("profile_pic")
-        profile_filename = None
 
-        if User.query.filter_by(email=email).first():
-            return {"message": "Email already registered"}, 400
-
-        # Save file locally (optional: you can use Cloudinary or other storage)
-        if profile_file:
-            profile_filename = f"profile_{email}_{profile_file.filename}"
-            profile_file.save(f"uploads/{profile_filename}")  # make sure 'uploads/' folder exists
-
-        # Generate OTP
-        otp = generate_otp()
-        send_otp_email(email, otp)
-
-        # Create user
-        user = User(
-            profile_picture=profile_filename,
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            mobile_number=mobile_number,
-            otp=otp,
-            role="user"  # only SuperAdmin can create admins
+        user, err = create_user_from_form(
+            first_name, last_name, email, password, mobile_number,
+            profile_file=profile_file, role="user", verified=False
         )
-        user.set_password(password)
+        if err:
+            return {"message": err}, 400
 
-        db.session.add(user)
+        # Generate OTP and send email
+        otp = generate_otp()
+        user.otp = otp
+        send_otp_email(email, otp)
         db.session.commit()
 
         return {"message": "User registered. Please verify OTP sent to your email."}, 201
@@ -185,37 +195,33 @@ class UserList(Resource):
     @jwt_required()
     def get(self):
         """Get all users (SuperAdmin only)"""
-        claims = get_jwt()  # access JWT claims
+        claims = get_jwt()
         if claims.get("role") != "superadmin":
             return {"message": "Unauthorized"}, 403
-
         users = User.query.all()
         return [u.to_dict() for u in users], 200
 
     @jwt_required()
-    @admin_ns.expect(register_model)
     def post(self):
         """Create a new user (SuperAdmin only)"""
-        claims = get_jwt()  # access JWT claims
+        claims = get_jwt()
         if claims.get("role") != "superadmin":
             return {"message": "Unauthorized"}, 403
 
-        data = request.json
-        if User.query.filter_by(email=data["email"]).first():
-            return {"message": "Email already registered"}, 400
+        first_name = request.form.get("first_name")
+        last_name = request.form.get("last_name")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        mobile_number = request.form.get("mobile_number")
+        profile_file = request.files.get("profile_pic")
 
-        user = User(
-            profile_picture=data.get("profile_picture"),
-            first_name=data["first_name"],
-            last_name=data["last_name"],
-            email=data["email"],
-            mobile_number=data["mobile_number"],
-            role="user",
-            is_verified=True  # SuperAdmin-created users don’t need OTP
+        user, err = create_user_from_form(
+            first_name, last_name, email, password, mobile_number,
+            profile_file=profile_file, role="user", verified=True  # auto-verified
         )
-        user.set_password(data["password"])
-        db.session.add(user)
-        db.session.commit()
+        if err:
+            return {"message": err}, 400
+
         return {"message": "User created successfully"}, 201
 
 

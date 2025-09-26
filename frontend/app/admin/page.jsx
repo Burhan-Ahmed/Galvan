@@ -56,18 +56,34 @@ export default function AdminPage() {
     const handleCreate = async (e) => {
         e.preventDefault();
         try {
+            const formData = new FormData();
+            formData.append("first_name", form.first_name);
+            formData.append("last_name", form.last_name);
+            formData.append("email", form.email);
+            formData.append("password", form.password);
+            formData.append("mobile_number", form.mobile_number);
+            if (form.profile_picture) {
+                formData.append("profile_pic", form.profile_picture); // file object
+            }
+
             await axios.post(
                 "http://127.0.0.1:5000/admin/users",
-                { ...form },
-                { headers: { Authorization: `Bearer ${token}` } }
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
             );
+
             setForm({
                 first_name: "",
                 last_name: "",
                 email: "",
                 password: "",
                 mobile_number: "",
-                profile_picture: "",
+                profile_picture: null,
             });
             setSection("view");
             fetchUsers();
@@ -177,21 +193,35 @@ export default function AdminPage() {
                     <div>
                         <h2 className="text-xl font-bold mb-2">Create User</h2>
                         <form className="flex flex-col gap-2" onSubmit={handleCreate}>
-                            {Object.keys(form).map((key) => (
-                                <input
-                                    key={key}
-                                    type={key === "password" ? "password" : "text"}
-                                    placeholder={key.replace("_", " ")}
-                                    value={form[key]}
-                                    onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                                    required
-                                    className="border p-2 rounded"
-                                />
-                            ))}
+                            {Object.keys(form)
+                                .filter((key) => key !== "profile_picture") // skip profile_picture in the loop
+                                .map((key) => (
+                                    <input
+                                        key={key}
+                                        type={key === "password" ? "password" : "text"}
+                                        placeholder={key.replace("_", " ")}
+                                        value={form[key]}
+                                        onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                                        required
+                                        className="border p-2 rounded"
+                                    />
+                                ))}
+
+                            {/* Dedicated file input for profile picture */}
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) =>
+                                    setForm({ ...form, profile_picture: e.target.files[0] })
+                                }
+                                className="border p-2 rounded"
+                            />
+
                             <button className="bg-blue-500 text-white px-4 py-2 rounded mt-2">
                                 Create
                             </button>
                         </form>
+
                     </div>
                 );
 
