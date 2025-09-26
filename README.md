@@ -28,6 +28,11 @@ This project implements a **User Authentication System** with the following feat
 <hr />
 
 ## Steps to run
+- To run this project in your local machine open terminal in any IDE and run:
+  ```bash 
+  git clone https://github.com/Burhan-Ahmed/Galvan.git
+  cd Galvan
+
 - The project directory contains two folders: **frontend** and **backend**, each holding the respective code.
 - Navigate to the frontend folder and start the Next.js development server:
   ```bash
