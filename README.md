@@ -1,9 +1,6 @@
 # Full Stack Developer Task – Galvan AI
 
 Progress: / Completed
-
-<br />
-
 <hr />
 
 ## Project Description
@@ -22,8 +19,23 @@ This project implements a **User Authentication System** with the following feat
 - The project directory contains two folders: **frontend** and **backend**, each holding the respective code.
 - Install backend dependencies by running:
   ```bash
-  pip install -r requirements.txt```
+  pip install -r requirements.txt
 - Navigate to the frontend folder and start the Next.js development server:
+cd frontend
+npm install
+npm run dev
+- Navigate to the backend folder and run the Flask server:
+cd backend
+python app.py
+
+Open your browser and go to:
+
+Frontend → http://localhost:3000
+
+Backend → http://127.0.0.1:5000
+
+<hr /> ```
+
 ## Tool
 <li>VS Code</li>
 <li>   Swagger UI </li>
