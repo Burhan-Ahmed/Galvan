@@ -21,10 +21,12 @@ This project implements a **User Authentication System** with the following feat
   ```bash
   pip install -r requirements.txt
 - Navigate to the frontend folder and start the Next.js development server:
+  ```bash
 cd frontend
 npm install
 npm run dev
 - Navigate to the backend folder and run the Flask server:
+  ```bash
 cd backend
 python app.py
 
