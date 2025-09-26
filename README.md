@@ -10,12 +10,23 @@ This project implements a **User Authentication System** with the following feat
 - Login using JWT authentication.
 - Role-based access control (SuperAdmin & Users).
 - Admin Dashboard to view, create, edit, and delete users.
-- Frontend built with **Next.js (React + Tailwind CSS)**.
-- Backend built with **Flask, Flask-RestX, SQLAlchemy, and JWT**.
-- Use ' https://temp-mail.io/en ' for fake email generation
-- Admin Credentials
- email: admin@system.com
- pass : Admin@123
+
+## Tech Stack
+
+- **Frontend**: Next.js, Tailwind CSS  
+- **Backend**: Flask, Flask-RestX, SQLAlchemy, JWT  
+- **Database**: SQLite  
+- **Email Testing**: Use [Temp Mail](https://temp-mail.io/en) for fake email generation  
+
+---
+
+## Admin Credentials
+
+- **Email**: `admin@system.com`  
+- **Password**: `Admin@123`  
+
+---
+
 <hr />
 
 ## Steps to run
