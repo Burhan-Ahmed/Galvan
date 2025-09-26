@@ -3,4 +3,5 @@ flask-restx
 flask-cors
 flask-jwt-extended
 flask-sqlalchemy
+python-dotenv
 werkzeug
