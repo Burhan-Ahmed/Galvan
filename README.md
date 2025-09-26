@@ -1,6 +1,6 @@
 # Full Stack Developer Task – Galvan AI
 
-Progress: / Completed
+Progress: Completed
 <hr />
 
 ## Project Description

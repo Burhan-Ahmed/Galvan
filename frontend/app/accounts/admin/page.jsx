@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import AdminLayout from "../AdminLayout";
+import AdminLayout from "@/app/AdminLayout";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 

@@ -23,9 +23,9 @@ export default function Login({ onSwitch }) {
 
             // Navigate based on role
             if (role === "superadmin") {
-                router.push("/admin");
+                router.push("/accounts/admin");
             } else {
-                router.push("/user");
+                router.push("/accounts/user");
             }
 
         } catch (err) {
