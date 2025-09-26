@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import AdminLayout from "../AdminLayout";
 import axios from "axios";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function AdminPage() {
     const [section, setSection] = useState("home");
@@ -13,6 +14,13 @@ export default function AdminPage() {
         password: "",
         mobile_number: "",
         profile_picture: "",
+    });
+
+    const [editingUser, setEditingUser] = useState(null);
+    const [editForm, setEditForm] = useState({
+        first_name: "",
+        last_name: "",
+        mobile_number: "",
     });
 
     const token =
@@ -31,7 +39,6 @@ export default function AdminPage() {
             const response = await axios.get("http://127.0.0.1:5000/admin/users", {
                 headers: { Authorization: `Bearer ${token}` },
             });
-
             const filtered = response.data.filter(
                 (user) => user.role !== "superadmin" && user.is_verified
             );
@@ -52,9 +59,7 @@ export default function AdminPage() {
             await axios.post(
                 "http://127.0.0.1:5000/admin/users",
                 { ...form },
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
+                { headers: { Authorization: `Bearer ${token}` } }
             );
             setForm({
                 first_name: "",
@@ -83,17 +88,26 @@ export default function AdminPage() {
         }
     };
 
-    // Update User
-    const handleUpdate = async (user) => {
-        const first_name = prompt("New First Name", user.first_name);
-        const last_name = prompt("New Last Name", user.last_name);
-        if (!first_name || !last_name) return;
+    // Open modal for editing
+    const openEditModal = (user) => {
+        setEditingUser(user);
+        setEditForm({
+            first_name: user.first_name,
+            last_name: user.last_name,
+            mobile_number: user.mobile_number,
+        });
+    };
+
+    // Submit updated user info
+    const submitEdit = async (e) => {
+        e.preventDefault();
         try {
             await axios.put(
-                `http://127.0.0.1:5000/admin/users/${user.id}`,
-                { first_name, last_name },
+                `http://127.0.0.1:5000/admin/users/${editingUser.id}`,
+                { ...editForm },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
+            setEditingUser(null);
             fetchUsers();
         } catch (err) {
             console.error(err);
@@ -134,7 +148,6 @@ export default function AdminPage() {
                                         <td className="px-4 py-2">{u.email}</td>
                                         <td className="px-4 py-2">{u.role}</td>
                                         <td className="px-4 py-2 flex gap-2">
-                                            {/* Only allow actions for non-superadmin */}
                                             {u.role !== "superadmin" && (
                                                 <>
                                                     <button
@@ -144,10 +157,10 @@ export default function AdminPage() {
                                                         Delete
                                                     </button>
                                                     <button
-                                                        onClick={() => handleUpdate(u)}
+                                                        onClick={() => openEditModal(u)}
                                                         className="bg-yellow-400 px-2 py-1 rounded text-white"
                                                     >
-                                                        Edit
+                                                        Edit User
                                                     </button>
                                                 </>
                                             )}
@@ -187,5 +200,78 @@ export default function AdminPage() {
         }
     };
 
-    return <AdminLayout>{renderSection()}</AdminLayout>;
+    return (
+        <AdminLayout>
+            {renderSection()}
+
+            {/* Edit User Modal */}
+            <AnimatePresence>
+                {editingUser && (
+                    <motion.div
+                        className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start pt-20 z-50"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                    >
+                        <motion.div
+                            className="bg-white p-6 rounded shadow-lg w-96"
+                            initial={{ y: -100 }}
+                            animate={{ y: 0 }}
+                            exit={{ y: -100 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                        >
+                            <h2 className="text-xl font-bold mb-4">Edit User</h2>
+                            <form className="flex flex-col gap-2" onSubmit={submitEdit}>
+                                <input
+                                    type="text"
+                                    placeholder="First Name"
+                                    value={editForm.first_name}
+                                    onChange={(e) =>
+                                        setEditForm({ ...editForm, first_name: e.target.value })
+                                    }
+                                    required
+                                    className="border p-2 rounded"
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Last Name"
+                                    value={editForm.last_name}
+                                    onChange={(e) =>
+                                        setEditForm({ ...editForm, last_name: e.target.value })
+                                    }
+                                    required
+                                    className="border p-2 rounded"
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Mobile Number"
+                                    value={editForm.mobile_number}
+                                    onChange={(e) =>
+                                        setEditForm({ ...editForm, mobile_number: e.target.value })
+                                    }
+                                    required
+                                    className="border p-2 rounded"
+                                />
+                                <div className="flex justify-end gap-2 mt-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setEditingUser(null)}
+                                        className="px-4 py-2 rounded border"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                                    >
+                                        Save
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </AdminLayout>
+    );
 }
