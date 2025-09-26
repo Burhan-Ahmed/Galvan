@@ -12,12 +12,10 @@ app = Flask(__name__)
 CORS(app, resources={r"/admin/*": {"origins": "http://localhost:3000"}}, supports_credentials=True)
 
 @app.after_request
-def add_cors_headers(response):
-    response.headers.add("Access-Control-Allow-Origin", "http://localhost:3000")
+def after_request(response):
     response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
     response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
     return response
-
 
 # Config
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database.db"
@@ -179,6 +177,8 @@ class Refresh(Resource):
 # 🔹 Admin Only: Manage Users
 from flask_jwt_extended import jwt_required, get_jwt
 from flask import request
+from flask_cors import cross_origin
+
 
 @admin_ns.route("/users")
 class UserList(Resource):
@@ -218,6 +218,28 @@ class UserList(Resource):
         db.session.commit()
         return {"message": "User created successfully"}, 201
 
+
+@admin_ns.route("/users/<int:id>")
+class UserDetail(Resource):
+    @cross_origin(origin="http://localhost:3000", headers=["Content-Type", "Authorization"])
+    @jwt_required()
+    def put(self, id):
+        """Update user (SuperAdmin only)"""
+        claims = get_jwt()
+        if claims.get("role") != "superadmin":
+            return {"message": "Unauthorized"}, 403
+
+        data = request.json
+        user = User.query.get(id)
+        if not user:
+            return {"message": "User not found"}, 404
+
+        user.first_name = data.get("first_name", user.first_name)
+        user.last_name = data.get("last_name", user.last_name)
+        user.mobile_number = data.get("mobile_number", user.mobile_number)
+
+        db.session.commit()
+        return {"message": "User updated successfully"}, 200
 
 
 if __name__ == "__main__":
